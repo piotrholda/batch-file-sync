@@ -1,0 +1,12 @@
+spring.main.log-startup-info: false
+sync:
+  - source: D:\temp\source
+    target: D:\temp\target
+    create: true
+    update: true
+    delete: false
+  - source: D:\temp\source2
+    target: D:\temp\target2
+    create: true
+    update: true
+    delete: false
