@@ -49,7 +49,7 @@ class SyncRunner implements Synchronization {
             } else {
                 if (sourceItem.isDirectory()) {
                     SyncPair subPair = new SyncPair(syncPair.source() + File.separator + sourceItem.name(), syncPair.target() + File.separator + targetItem.name(), syncPair.create(), syncPair.update(), syncPair.delete());
-                    logger.info("Item " + sourceItem.name() + " is directoey. ");
+                    logger.info("Item " + sourceItem.name() + " is directory. ");
                     processPair(subPair);
                 } else if (sourceItem.isNewerThan(targetItem)) {
                     logger.info("Item " + sourceItem.name() + " has different properties: " + sourceItem.lastModified() + " vs " + targetItem.lastModified());
