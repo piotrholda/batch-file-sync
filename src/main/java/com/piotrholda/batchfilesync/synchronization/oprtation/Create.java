@@ -8,7 +8,9 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Optional;
 
-class Copy implements Operation {
+import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
+
+class Create implements Operation {
 
     @Override
     public Optional<Path> execute(Path source, Path target) {
@@ -23,7 +25,7 @@ class Copy implements Operation {
                 copyDirectoryRecursively(source, target);
                 return target;
             } else {
-                return Files.copy(source, target, StandardCopyOption.COPY_ATTRIBUTES);
+                return Files.copy(source, target, COPY_ATTRIBUTES);
             }
         } catch (IOException e) {
             throw new UncheckedIOException(e);

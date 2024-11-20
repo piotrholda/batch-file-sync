@@ -125,4 +125,53 @@ class SyncRunnerTest {
         assertTrue(Files.exists(targetFile));
         assertEquals(fileContent, new String(Files.readAllBytes(targetFile)));
     }
+
+    @Test
+    void shouldUpdateFile(@TempDir Path sourceDir, @TempDir Path targetDir) throws IOException, InterruptedException {
+
+        // given
+        String fileName = "file1.txt";
+        Path targetFile = targetDir.resolve(fileName);
+        Files.createFile(targetFile);
+        Thread.sleep(1);
+        Path sourceFile = sourceDir.resolve(fileName);
+        String fileContent = "Hello, World!";
+        Files.write(sourceFile, fileContent.getBytes());
+        Mockito.when(syncConfig.sync()).thenReturn(List.of(new SyncPair(sourceDir.toString(), targetDir.toString(), false, true, false)));
+
+        // when
+        synchronization.run();
+
+        // then
+        assertTrue(Files.exists(targetFile));
+        assertEquals(fileContent, new String(Files.readAllBytes(targetFile)));
+        assertEquals(Files.getLastModifiedTime(sourceFile), Files.getLastModifiedTime(targetFile));
+    }
+
+    @Test
+    void shouldUpdateFileInSubdirectory(@TempDir Path sourceDir, @TempDir Path targetDir) throws IOException, InterruptedException {
+
+        // given
+        String fileName = "file1.txt";
+        String dirName = "subdirectory";
+        Path targetSubdirectory = targetDir.resolve(dirName);
+        Path createdTargetSubdirectory = Files.createDirectory(targetSubdirectory);
+        Path targetFile = createdTargetSubdirectory.resolve(fileName);
+        Files.createFile(targetFile);
+        Thread.sleep(1);
+        Path sourceSubdirectory = sourceDir.resolve(dirName);
+        Path createdSourceSubdirectory = Files.createDirectory(sourceSubdirectory);
+        Path sourceFile = createdSourceSubdirectory.resolve(fileName);
+        String fileContent = "Hello, World!";
+        Files.write(sourceFile, fileContent.getBytes());
+        Mockito.when(syncConfig.sync()).thenReturn(List.of(new SyncPair(sourceDir.toString(), targetDir.toString(), false, true, false)));
+
+        // when
+        synchronization.run();
+
+        // then
+        assertTrue(Files.exists(targetFile));
+        assertEquals(fileContent, new String(Files.readAllBytes(targetFile)));
+        assertEquals(Files.getLastModifiedTime(sourceFile), Files.getLastModifiedTime(targetFile));
+    }
 }

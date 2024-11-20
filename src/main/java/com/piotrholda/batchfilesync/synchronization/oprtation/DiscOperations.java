@@ -7,12 +7,21 @@ import java.util.Optional;
 
 class DiscOperations implements Operations {
 
-    private final Optional<Operation> copy;
+    private final Operation create;
+    private final Operation update;
 
     DiscOperations(boolean create, boolean update, boolean delete) {
-        this.copy = create? Optional.of(new Copy()) : Optional.empty();
+        this.create = create ? new Create() : null;
+        this.update = update ? new Update() : null;
     }
 
     @Override
-    public Operation copy() {return copy.orElse((source, target) -> Optional.empty());}
+    public Operation create() {
+        return Optional.ofNullable(create).orElse((source, target) -> Optional.empty());
+    }
+
+    @Override
+    public Operation update() {
+        return Optional.ofNullable(update).orElse((source, target) -> Optional.empty());
+    }
 }
