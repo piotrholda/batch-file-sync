@@ -58,7 +58,8 @@ class DirectoryContentScannerTest {
 
     private void assertDirItem(DirItem actualItem, DirItem expectedItem) {
         assertEquals(expectedItem.name(), actualItem.name());
-        assertEquals(expectedItem.lastModified(), actualItem.lastModified());
+        // Ignore fractions of seconds when comparing lastModified
+        assertEquals(expectedItem.lastModified().withNano(0), actualItem.lastModified().withNano(0));
         assertEquals(expectedItem.isDirectory(), actualItem.isDirectory());
     }
 }

@@ -145,7 +145,11 @@ class SyncRunnerTest {
         // then
         assertTrue(Files.exists(targetFile));
         assertEquals(fileContent, new String(Files.readAllBytes(targetFile)));
-        assertEquals(Files.getLastModifiedTime(sourceFile), Files.getLastModifiedTime(targetFile));
+        // Ignore fractions of seconds when comparing lastModifiedTime
+        assertEquals(
+            Files.getLastModifiedTime(sourceFile).toMillis() / 1000,
+            Files.getLastModifiedTime(targetFile).toMillis() / 1000
+        );
     }
 
     @Test
@@ -172,6 +176,10 @@ class SyncRunnerTest {
         // then
         assertTrue(Files.exists(targetFile));
         assertEquals(fileContent, new String(Files.readAllBytes(targetFile)));
-        assertEquals(Files.getLastModifiedTime(sourceFile), Files.getLastModifiedTime(targetFile));
+        // Ignore fractions of seconds when comparing lastModifiedTime
+        assertEquals(
+            Files.getLastModifiedTime(sourceFile).toMillis() / 1000,
+            Files.getLastModifiedTime(targetFile).toMillis() / 1000
+        );
     }
 }

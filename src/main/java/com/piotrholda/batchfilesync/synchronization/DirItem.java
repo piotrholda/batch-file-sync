@@ -10,6 +10,9 @@ public record DirItem(String name, LocalDateTime lastModified, boolean isDirecto
     }
 
     public boolean isNewerThan(DirItem other) {
-        return lastModified.isAfter(other.lastModified);
+        // Ignore fractions of seconds (nanos) when comparing
+        LocalDateTime thisTruncated = lastModified.withNano(0);
+        LocalDateTime otherTruncated = other.lastModified.withNano(0);
+        return thisTruncated.isAfter(otherTruncated);
     }
 }
